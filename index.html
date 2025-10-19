@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polaris DB</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0e27 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 0, 150, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { 
+                background: 
+                    radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 40%, rgba(255, 0, 150, 0.05) 0%, transparent 50%);
+            }
+            50% { 
+                background: 
+                    radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 60% 60%, rgba(255, 0, 150, 0.05) 0%, transparent 50%);
+            }
+        }
+
+        /* Animated starfield effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, rgba(0, 255, 255, 0.3), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255, 0, 150, 0.2), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(0, 255, 255, 0.3), transparent),
+                radial-gradient(2px 2px at 160px 30px, rgba(255, 0, 150, 0.2), transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: starfield 30s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes starfield {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .showcase-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(0, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 40px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, 
+                rgba(0, 255, 255, 0.1) 0%, 
+                rgba(0, 150, 255, 0.05) 50%, 
+                rgba(255, 0, 150, 0.1) 100%);
+            color: #ffffff;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin: -40px -40px 40px -40px;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                /* Animated data streams */
+                linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.1) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 20%, rgba(255, 0, 150, 0.08) 40%, transparent 60%),
+                linear-gradient(90deg, transparent 10%, rgba(0, 255, 255, 0.05) 30%, transparent 50%),
+                /* Digital circuit patterns */
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 80% 80%, rgba(255, 0, 150, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 60%),
+                /* Cosmic nebula effect */
+                conic-gradient(from 0deg at 30% 30%, rgba(0, 255, 255, 0.1), transparent, rgba(255, 0, 150, 0.08), transparent, rgba(0, 255, 255, 0.1)),
+                conic-gradient(from 180deg at 70% 70%, rgba(255, 0, 150, 0.08), transparent, rgba(0, 255, 255, 0.1), transparent, rgba(255, 0, 150, 0.08));
+            opacity: 0.4;
+            animation: heroBackground 15s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes heroBackground {
+            0%, 100% { 
+                background: 
+                    linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.1) 50%, transparent 70%),
+                    linear-gradient(-45deg, transparent 20%, rgba(255, 0, 150, 0.08) 40%, transparent 60%),
+                    linear-gradient(90deg, transparent 10%, rgba(0, 255, 255, 0.05) 30%, transparent 50%),
+                    radial-gradient(circle at 20% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 30%),
+                    radial-gradient(circle at 80% 80%, rgba(255, 0, 150, 0.08) 0%, transparent 40%),
+                    radial-gradient(circle at 50% 50%, rgba(0, 255, 255, 0.05) 0%, transparent 60%),
+                    conic-gradient(from 0deg at 30% 30%, rgba(0, 255, 255, 0.1), transparent, rgba(255, 0, 150, 0.08), transparent, rgba(0, 255, 255, 0.1)),
+                    conic-gradient(from 180deg at 70% 70%, rgba(255, 0, 150, 0.08), transparent, rgba(0, 255, 255, 0.1), transparent, rgba(255, 0, 150, 0.08));
+                transform: scale(1) rotate(0deg);
+            }
+            25% { 
+                background: 
+                    linear-gradient(135deg, transparent 20%, rgba(0, 255, 255, 0.12) 40%, transparent 60%),
+                    linear-gradient(-135deg, transparent 30%, rgba(255, 0, 150, 0.1) 50%, transparent 70%),
+                    linear-gradient(45deg, transparent 15%, rgba(0, 255, 255, 0.08) 35%, transparent 55%),
+                    radial-gradient(circle at 40% 40%, rgba(0, 255, 255, 0.12) 0%, transparent 35%),
+                    radial-gradient(circle at 60% 60%, rgba(255, 0, 150, 0.1) 0%, transparent 45%),
+                    radial-gradient(circle at 30% 70%, rgba(0, 255, 255, 0.08) 0%, transparent 50%),
+                    conic-gradient(from 90deg at 40% 40%, rgba(0, 255, 255, 0.12), transparent, rgba(255, 0, 150, 0.1), transparent, rgba(0, 255, 255, 0.12)),
+                    conic-gradient(from 270deg at 60% 60%, rgba(255, 0, 150, 0.1), transparent, rgba(0, 255, 255, 0.12), transparent, rgba(255, 0, 150, 0.1));
+                transform: scale(1.02) rotate(1deg);
+            }
+            50% { 
+                background: 
+                    linear-gradient(225deg, transparent 25%, rgba(0, 255, 255, 0.15) 45%, transparent 65%),
+                    linear-gradient(-225deg, transparent 35%, rgba(255, 0, 150, 0.12) 55%, transparent 75%),
+                    linear-gradient(180deg, transparent 20%, rgba(0, 255, 255, 0.1) 40%, transparent 60%),
+                    radial-gradient(circle at 60% 20%, rgba(0, 255, 255, 0.15) 0%, transparent 40%),
+                    radial-gradient(circle at 40% 80%, rgba(255, 0, 150, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 70% 30%, rgba(0, 255, 255, 0.1) 0%, transparent 45%),
+                    conic-gradient(from 180deg at 50% 50%, rgba(0, 255, 255, 0.15), transparent, rgba(255, 0, 150, 0.12), transparent, rgba(0, 255, 255, 0.15)),
+                    conic-gradient(from 0deg at 50% 50%, rgba(255, 0, 150, 0.12), transparent, rgba(0, 255, 255, 0.15), transparent, rgba(255, 0, 150, 0.12));
+                transform: scale(1.05) rotate(2deg);
+            }
+            75% { 
+                background: 
+                    linear-gradient(315deg, transparent 30%, rgba(0, 255, 255, 0.12) 50%, transparent 70%),
+                    linear-gradient(-315deg, transparent 25%, rgba(255, 0, 150, 0.1) 45%, transparent 65%),
+                    linear-gradient(270deg, transparent 18%, rgba(0, 255, 255, 0.08) 38%, transparent 58%),
+                    radial-gradient(circle at 80% 40%, rgba(0, 255, 255, 0.12) 0%, transparent 35%),
+                    radial-gradient(circle at 20% 60%, rgba(255, 0, 150, 0.1) 0%, transparent 45%),
+                    radial-gradient(circle at 60% 80%, rgba(0, 255, 255, 0.08) 0%, transparent 50%),
+                    conic-gradient(from 270deg at 60% 40%, rgba(0, 255, 255, 0.12), transparent, rgba(255, 0, 150, 0.1), transparent, rgba(0, 255, 255, 0.12)),
+                    conic-gradient(from 90deg at 40% 60%, rgba(255, 0, 150, 0.1), transparent, rgba(0, 255, 255, 0.12), transparent, rgba(255, 0, 150, 0.1));
+                transform: scale(1.02) rotate(1deg);
+            }
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 255, 255, 0.05) 50%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00ffff 0%, #ffffff 50%, #00ffff 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header h1::before {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            transition: width 0.3s ease;
+        }
+
+        .header h1:hover::before {
+            width: 100%;
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+
+        .header h1::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00ffff 0%, #ffffff 50%, #00ffff 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.3;
+            transform: scaleY(-1) scaleX(1);
+            filter: blur(1px);
+            z-index: -1;
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { 
+                box-shadow: 0 0 5px rgba(0, 255, 255, 0.5), 0 0 10px rgba(0, 255, 255, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.5);
+            }
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .comparison-card {
+            padding: 30px;
+            position: relative;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .without-software {
+            background: linear-gradient(145deg, 
+                rgba(220, 38, 38, 0.15) 0%, 
+                rgba(239, 68, 68, 0.08) 50%, 
+                rgba(185, 28, 28, 0.15) 100%);
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            box-shadow: 
+                0 10px 30px rgba(255, 107, 107, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: redPulse 3s ease-in-out infinite;
+        }
+
+        .with-software {
+            background: linear-gradient(145deg, 
+                rgba(0, 255, 255, 0.15) 0%, 
+                rgba(0, 150, 255, 0.08) 50%, 
+                rgba(0, 255, 200, 0.15) 100%);
+            border: 2px solid rgba(0, 255, 255, 0.4);
+            box-shadow: 
+                0 10px 30px rgba(0, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: cyanPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes redPulse {
+            0%, 100% { 
+                border-color: rgba(239, 68, 68, 0.4);
+                box-shadow: 
+                    0 10px 30px rgba(255, 107, 107, 0.1),
+                    0 0 20px rgba(255, 107, 107, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            }
+            50% { 
+                border-color: rgba(255, 107, 107, 0.6);
+                box-shadow: 
+                    0 10px 30px rgba(255, 107, 107, 0.2),
+                    0 0 30px rgba(255, 107, 107, 0.4),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        @keyframes cyanPulse {
+            0%, 100% { 
+                border-color: rgba(0, 255, 255, 0.4);
+                box-shadow: 
+                    0 10px 30px rgba(0, 255, 255, 0.1),
+                    0 0 20px rgba(0, 255, 255, 0.2),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            }
+            50% { 
+                border-color: rgba(0, 255, 255, 0.6);
+                box-shadow: 
+                    0 10px 30px rgba(0, 255, 255, 0.2),
+                    0 0 30px rgba(0, 255, 255, 0.4),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-right: 20px;
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+
+        .without-software .card-icon {
+            color: #ff6b6b;
+        }
+
+        .with-software .card-icon {
+            color: #00ffff;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .without-software .card-title {
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .with-software .card-title {
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .input-section {
+            margin-bottom: 25px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .data-input {
+            width: 100%;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            font-size: 1rem;
+            margin-bottom: 25px;
+            resize: vertical;
+            min-height: 140px;
+            background: rgba(15, 23, 42, 0.5);
+            color: #ffffff;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .data-input:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .data-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .without-software .submit-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 50%, #ff6b6b 100%);
+            color: #ffffff;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .with-software .submit-btn {
+            background: linear-gradient(135deg, #00ffff 0%, #0099ff 50%, #00ffff 100%);
+            color: #000000;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .without-software .submit-btn:hover {
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4);
+        }
+
+        .with-software .submit-btn:hover {
+            box-shadow: 0 15px 40px rgba(0, 255, 255, 0.4);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .processing-display {
+            min-height: 250px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            background: rgba(15, 23, 42, 0.2);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .processing-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 15px;
+            transition: all 0.4s ease;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-icon {
+            font-size: 1.8rem;
+            margin-right: 20px;
+            width: 40px;
+            text-align: center;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+
+        .step-status {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.4;
+        }
+
+        .step-time {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-left: 15px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+        }
+
+        .processing-step.active {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 4px solid #00ffff;
+            transform: translateX(8px);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .processing-step.completed {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+
+        .processing-step.slow {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.2);
+        }
+
+        .processing-step.error {
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.2);
+        }
+
+        .speed-comparison {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid rgba(0, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+        }
+
+        .speed-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .metric {
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+        }
+
+        .metric:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .metric-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .metric-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .improvement {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(0, 200, 255, 0.3));
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .improvement .metric-value {
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .improvement .metric-label {
+            color: rgba(0, 255, 255, 0.8);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .processing-step.active .step-icon {
+            animation: pulse 1s infinite;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Glowing effects */
+        .glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .glow-red {
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .showcase-container {
+                margin: 10px;
+                border-radius: 20px;
+                padding: 20px;
+            }
+
+            .comparison-card {
+                padding: 20px;
+            }
+
+            .speed-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .metric-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="showcase-container">
+        <div class="header">
+            <h1 data-text="🚀 Polaris">🚀 Polaris</h1>
+            <p>Bridging security, intelligence, and automation in real-time.</p>
+        </div>
+
+        <div class="comparison-grid">
+            <!-- Without Our Software -->
+            <div class="comparison-card without-software">
+                <div class="card-header">
+                    <div class="card-icon">⏳</div>
+                    <div class="card-title">Without Our Software</div>
+                </div>
+                
+                <div class="input-section">
+                    <label for="traditionalData">Enter data for traditional processing:</label>
+                    <textarea id="traditionalData" class="data-input" placeholder="Enter your data here for traditional batch processing..."></textarea>
+                </div>
+                
+                <button class="submit-btn" onclick="startTraditionalProcessing()">Start Traditional Processing</button>
+                
+                <div class="processing-display" id="traditionalProcessing">
+                    <div style="text-align: center; color: #666; margin-top: 50px;">
+                        Click "Start Traditional Processing" to see the slow, inefficient process
+                    </div>
+                </div>
+            </div>
+
+            <!-- With Our Software -->
+            <div class="comparison-card with-software">
+                <div class="card-header">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-title">With Our Software</div>
+                </div>
+                
+                <div class="input-section">
+                    <label for="ourSoftwareData">Enter data for our software:</label>
+                    <textarea id="ourSoftwareData" class="data-input" placeholder="Enter your data here for fast processing..."></textarea>
+                </div>
+                
+                <button class="submit-btn" onclick="startOurSoftwareProcessing()">Start Our Software</button>
+                
+                <div class="processing-display" id="ourSoftwareProcessing">
+                    <div style="text-align: center; color: #666; margin-top: 50px;">
+                        Click "Start Our Software" to see the lightning-fast process
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="speed-comparison">
+            <h2>📊 Performance Comparison</h2>
+            <div class="speed-metrics">
+                <div class="metric">
+                    <div class="metric-value" id="traditionalTime">--</div>
+                    <div class="metric-label">Traditional Time</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="ourSoftwareTime">--</div>
+                    <div class="metric-label">Our Software Time</div>
+                </div>
+                <div class="metric improvement">
+                    <div class="metric-value" id="improvement">--</div>
+                    <div class="metric-label">Speed Improvement</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let traditionalStartTime = 0;
+        let ourSoftwareStartTime = 0;
+        let traditionalSteps = [];
+
+        // Function to format time realistically (seconds → minutes → hours)
+        function formatRealisticTime(elapsedMs, isTraditional = false) {
+            const elapsedSeconds = elapsedMs / 1000;
+            
+            if (isTraditional) {
+                // For traditional processing, show realistic delays
+                if (elapsedSeconds < 60) {
+                    return `${elapsedSeconds.toFixed(1)}s`;
+                } else if (elapsedSeconds < 3600) {
+                    const minutes = Math.floor(elapsedSeconds / 60);
+                    const seconds = Math.floor(elapsedSeconds % 60);
+                    return `${minutes}m ${seconds}s`;
+                } else {
+                    const hours = Math.floor(elapsedSeconds / 3600);
+                    const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+                    return `${hours}h ${minutes}m`;
+                }
+            } else {
+                // For our software, show fast processing
+                return `${elapsedSeconds.toFixed(2)}s`;
+            }
+        }
+        let ourSoftwareSteps = [];
+
+        function startTraditionalProcessing() {
+            const data = document.getElementById('traditionalData').value.trim();
+            if (!data) {
+                alert('Please enter some data first');
+                return;
+            }
+
+            traditionalStartTime = Date.now();
+            traditionalSteps = [];
+            
+            const processingDiv = document.getElementById('traditionalProcessing');
+            processingDiv.innerHTML = '';
+
+            // Traditional processing steps (extremely slow and inefficient)
+            const steps = [
+                { icon: '📝', title: 'Data Queued', status: 'Added to batch processing queue', time: 5000 }, // 5 seconds
+                { icon: '👤', title: 'Manual Review', status: 'Human staff must review and approve data entries (2-4 hours)', time: 15000 }, // 15 seconds (simulating hours)
+                { icon: '🔄', title: 'File Conversion', status: 'Legacy systems convert files into compatible formats (6-12 hours)', time: 25000 }, // 25 seconds (simulating 6-12 hours)
+                { icon: '🌐', title: 'Network Delay', status: 'Transfer bottlenecks due to centralized servers and bandwidth limits (8-10 hours)', time: 30000 }, // 30 seconds (simulating 8-10 hours)
+                { icon: '❌', title: 'Error Reprocessing', status: 'Data inconsistencies found — restarting batch (+12 hours)', time: 20000 }, // 20 seconds (simulating +12 hours)
+                { icon: '⏳', title: '48-Hour Wait', status: 'Still waiting... 47+ hours remaining', time: 40000 } // 40 seconds (emphasizing never-ending wait)
+            ];
+
+            processTraditionalSteps(steps, 0);
+        }
+
+        function processTraditionalSteps(steps, index) {
+            // Traditional processing never completes due to 48-hour batch delay
+            if (index >= steps.length) {
+                // Show that traditional processing is still waiting
+                const processingDiv = document.getElementById('traditionalProcessing');
+                const waitingElement = document.createElement('div');
+                waitingElement.className = 'processing-step error';
+                waitingElement.innerHTML = `
+                    <div class="step-icon">⏳</div>
+                    <div class="step-content">
+                        <div class="step-title">Still Processing...</div>
+                        <div class="step-status">48-hour batch delay - processing will complete in 47+ hours</div>
+                    </div>
+                    <div class="step-time">${(Date.now() - traditionalStartTime) / 1000}s</div>
+                `;
+                processingDiv.appendChild(waitingElement);
+                
+                const totalTime = Date.now() - traditionalStartTime;
+                document.getElementById('traditionalTime').textContent = `${(totalTime / 1000).toFixed(1)}s (incomplete)`;
+                updateComparison();
+                return;
+            }
+
+            const step = steps[index];
+            const processingDiv = document.getElementById('traditionalProcessing');
+            
+            const stepElement = document.createElement('div');
+            stepElement.className = 'processing-step';
+            stepElement.innerHTML = `
+                <div class="step-icon">${step.icon}</div>
+                <div class="step-content">
+                    <div class="step-title">${step.title}</div>
+                    <div class="step-status">${step.status}</div>
+                </div>
+                <div class="step-time">${formatRealisticTime(Date.now() - traditionalStartTime, true)}</div>
+            `;
+            
+            processingDiv.appendChild(stepElement);
+            stepElement.classList.add('active');
+
+            // Special handling for 48-hour wait step
+            if (step.title === '48-Hour Wait') {
+                setTimeout(() => {
+                    stepElement.classList.remove('active');
+                    stepElement.classList.add('error');
+                    stepElement.innerHTML = `
+                        <div class="step-icon">⏳</div>
+                        <div class="step-content">
+                            <div class="step-title">48-Hour Wait</div>
+                            <div class="step-status">Still waiting... 47+ hours remaining</div>
+                        </div>
+                        <div class="step-time">${formatRealisticTime(Date.now() - traditionalStartTime, true)}</div>
+                    `;
+                    // Don't continue to next step - traditional processing is stuck
+                    const totalTime = Date.now() - traditionalStartTime;
+                    document.getElementById('traditionalTime').textContent = `${formatRealisticTime(totalTime, true)} (stuck)`;
+                    updateComparison();
+                }, step.time);
+                return;
+            }
+
+            // Simulate random crashes for other steps
+            if (Math.random() < 0.3 && step.title === 'System Crash') {
+                stepElement.classList.add('error');
+                setTimeout(() => {
+                    stepElement.classList.remove('active');
+                    stepElement.classList.add('completed');
+                    processTraditionalSteps(steps, index + 1);
+                }, step.time);
+            } else {
+                setTimeout(() => {
+                    stepElement.classList.remove('active');
+                    stepElement.classList.add('completed');
+                    processTraditionalSteps(steps, index + 1);
+                }, step.time);
+            }
+        }
+
+        function startOurSoftwareProcessing() {
+            const data = document.getElementById('ourSoftwareData').value.trim();
+            if (!data) {
+                alert('Please enter some data first');
+                return;
+            }
+
+            ourSoftwareStartTime = Date.now();
+            ourSoftwareSteps = [];
+            
+            const processingDiv = document.getElementById('ourSoftwareProcessing');
+            processingDiv.innerHTML = '';
+
+            // Our software processing steps (ultra-fast and efficient)
+            const steps = [
+                { icon: '🔒', title: 'Data Encryption', status: 'Advanced encryption in progress', time: 50 },
+                { icon: '⚡', title: 'AI Validation', status: 'Neural network verification', time: 40 },
+                { icon: '🔍', title: 'Smart Analysis', status: 'Machine learning pattern analysis', time: 30 },
+                { icon: '🔄', title: 'Real-time Sync', status: 'Instant data synchronization', time: 25 },
+                { icon: '🚀', title: 'Lightning Transmit', status: 'Ultra-fast server transmission', time: 35 },
+                { icon: '✅', title: 'Complete', status: 'Processing completed successfully', time: 15 }
+            ];
+
+            processOurSoftwareSteps(steps, 0);
+        }
+
+        function processOurSoftwareSteps(steps, index) {
+            if (index >= steps.length) {
+                const totalTime = Date.now() - ourSoftwareStartTime;
+                document.getElementById('ourSoftwareTime').textContent = `${formatRealisticTime(totalTime, false)}`;
+                updateComparison();
+                return;
+            }
+
+            const step = steps[index];
+            const processingDiv = document.getElementById('ourSoftwareProcessing');
+            
+            const stepElement = document.createElement('div');
+            stepElement.className = 'processing-step';
+            stepElement.innerHTML = `
+                <div class="step-icon">${step.icon}</div>
+                <div class="step-content">
+                    <div class="step-title">${step.title}</div>
+                    <div class="step-status">${step.status}</div>
+                </div>
+                <div class="step-time">${formatRealisticTime(Date.now() - ourSoftwareStartTime, false)}</div>
+            `;
+            
+            processingDiv.appendChild(stepElement);
+            stepElement.classList.add('active');
+
+            setTimeout(() => {
+                stepElement.classList.remove('active');
+                stepElement.classList.add('completed');
+                processOurSoftwareSteps(steps, index + 1);
+            }, step.time);
+        }
+
+        function updateComparison() {
+            const traditionalTime = parseFloat(document.getElementById('traditionalTime').textContent);
+            const ourSoftwareTime = parseFloat(document.getElementById('ourSoftwareTime').textContent);
+            
+            if (!isNaN(traditionalTime) && !isNaN(ourSoftwareTime)) {
+                const improvement = ((traditionalTime - ourSoftwareTime) / traditionalTime * 100).toFixed(0);
+                document.getElementById('improvement').textContent = `${improvement}%`;
+            }
+        }
+
+        // Auto-sync data between inputs
+        document.getElementById('traditionalData').addEventListener('input', function() {
+            document.getElementById('ourSoftwareData').value = this.value;
+        });
+
+        document.getElementById('ourSoftwareData').addEventListener('input', function() {
+            document.getElementById('traditionalData').value = this.value;
+        });
+    </script>
+</body>
+</html>

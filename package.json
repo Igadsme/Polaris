@@ -1,0 +1,28 @@
+{
+  "name": "polaris-showcase",
+  "version": "1.0.0",
+  "description": "Polaris - Bridging security, intelligence, and automation in real-time",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "polaris",
+    "data-processing",
+    "real-time",
+    "security",
+    "automation",
+    "showcase"
+  ],
+  "author": "Polaris Team",
+  "license": "MIT",
+  "dependencies": {
+    "http": "^1.0.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
