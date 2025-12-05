@@ -13,10 +13,6 @@ A futuristic web application that demonstrates the dramatic difference between t
 - **Mobile Responsive** - Works perfectly on all devices
 - **Interactive Demonstrations** - Live processing simulations
 
-## 🚀 Quick Start
-
-
-
 ### Prerequisites
 - Node.js (version 14 or higher)
 - Modern web browser
@@ -132,18 +128,3 @@ npm start
 4. Configure your domain to point to the server
 
 make sure you configure the production and and the index.html
-
-## 📞 Support
-
-For questions or issues:
-- Check the browser console for errors
-- Ensure Node.js is properly installed
-- Verify port 3001 is available
-
-## 🎉 Enjoy Your Polaris Showcase!
-
-This application demonstrates the future of data processing with Polaris's cutting-edge technology. Perfect for presentations, demos, and hackathon competitions.
-
----
-
-**Built with ❤️ for the future of data processing**
