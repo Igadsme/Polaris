@@ -15,9 +15,12 @@ A futuristic web application that demonstrates the dramatic difference between t
 
 ## 🚀 Quick Start
 
+
+
 ### Prerequisites
 - Node.js (version 14 or higher)
 - Modern web browser
+
 
 ### Installation
 
@@ -66,7 +69,7 @@ A futuristic web application that demonstrates the dramatic difference between t
 
 ## 🎨 Design Features
 
-- **Animated Starfield** - Moving particle effects
+- **Animated Starfield** - Moving particle effects.
 - **Pulsing Borders** - Soft glow animations
 - **Holographic Text** - 3D reflection effects
 - **Data Stream Backgrounds** - Animated gradient patterns
