@@ -126,5 +126,3 @@ npm start
 2. Ensure Node.js is installed
 3. Run `npm start`
 4. Configure your domain to point to the server
-
-make sure you configure the production and and the index.html
