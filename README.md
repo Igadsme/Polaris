@@ -1,4 +1,4 @@
-Ni# 🚀 Polaris - Software Showcase
+ Polaris - Software Showcase
 
 **Bridging security, intelligence, and automation in real-time.**
 
